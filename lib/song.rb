@@ -8,6 +8,32 @@ class Song
     @album = album
   end
 
+  sql + <<- SQL
+      SELECT * 
+      FROM songs
+    SQL 
+    DB = { conn: SQLite3::Database.new("db/music.db") }
+
+    def self.all
+      sql = <<-SQL
+        SELECT *
+        FROM songs
+      SQL
+  
+      DB[:conn].execute(sql)
+
+      def self.all
+        sql = <<-SQL
+          SELECT *
+          FROM songs
+        SQL
+    
+        DB[:conn].execute(sql).map do |row|
+          self.new_from_db(row)
+        end
+      end
+    end
+
   def self.drop_table
     sql = <<-SQL
       DROP TABLE IF EXISTS songs
